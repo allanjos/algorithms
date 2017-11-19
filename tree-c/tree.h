@@ -1,3 +1,9 @@
+/**
+ * A binary tree implementation.
+ * 
+ * \author Allann Jones
+ */
+
 #ifndef TREE_H
 #define TREE_H
 
@@ -54,6 +60,7 @@ void tree_delete(Tree_t **tree);
 /** Search for an item in the tree. */
 TreeNode_t *tree_search_item(Tree_t *tree, UserData_t data);
 
+/** Search for a specific tree node. */
 TreeNode_t *tree_node_search_item(TreeNode_t *node, UserData_t data);
 
 /** Dump the tree. */

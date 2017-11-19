@@ -1,3 +1,9 @@
+/**
+ * A queue implementation.
+ * 
+ * \author Allann Jones
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "queue.h"

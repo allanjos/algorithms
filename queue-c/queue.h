@@ -1,3 +1,9 @@
+/**
+ * A queue implementation.
+ * 
+ * \author Allann Jones
+ */
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
