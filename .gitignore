@@ -40,3 +40,8 @@
 # Editors
 *~
 .vscode/
+
+queue-c/queue-test
+tree-c/tree-test
+prime-c/prime
+divisors-c/divisors
