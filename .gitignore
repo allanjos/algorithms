@@ -41,6 +41,10 @@
 *~
 .vscode/
 
+# Java
+*.class
+
+# Specific rules to the project
 queue-c/queue-test
 tree-c/tree-test
 prime-c/prime
