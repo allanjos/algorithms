@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
@@ -17,17 +19,20 @@ import javax.swing.JPanel;
 
 class EulerPanel extends JPanel implements MouseListener
 {
+    private static final long serialVersionUID = 1L;
     private double graphMargin = 50.0;
     private List<Point2D> graphPoints = new ArrayList<>();
     private Font font = null;
 
     public EulerPanel()
     {
-        font = new Font("Serif", Font.PLAIN, 18);
+        font = new Font("Serif", Font.PLAIN, 12);
 
         calculatePoints();
 
-        this.addMouseListener(this);
+        addMouseListener(this);
+
+        addComponentListener(new ComponentResizeListener());
     }
 
     public void init() {
@@ -37,7 +42,9 @@ class EulerPanel extends JPanel implements MouseListener
     public void calculatePoints() {
         graphPoints.clear();
 
-        int n = 200;
+        int n = (int) getSize().getWidth() - 2 * (int) graphMargin;
+
+        System.out.println("Number of points on X axe: " + n);
 
         for (int i = 0; i < n; i++) {
             double y = Math.pow((double) 1 + (double) 1 / (double) i, (double) i) * 100.0;
@@ -63,17 +70,44 @@ class EulerPanel extends JPanel implements MouseListener
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, (int) getSize().getWidth(), (int) getSize().getHeight());
 
-        g2d.setColor(Color.BLACK);
+        g2d.setFont(font);
 
         Shape shape;
 
-        //g2d.setFont(font);
+        // Euler number (e) line
 
-        // Title
+        g2d.setColor(Color.GREEN);
 
-        g2d.drawString("Euler constant demonstration", 5, 20);
+        shape = new Line2D.Double(graphMargin,
+                                  Math.E * 100 + graphMargin,
+                                  getSize().width - graphMargin * 2,
+                                  Math.E * 100 + graphMargin);
+
+        g2d.draw(shape);
+
+        g2d.setColor(Color.BLACK);
+
+        // X point markers
+
+        int markerX = 0;
+        int canvasWidth = (int) getSize().getWidth() - (int) graphMargin * 2;
+
+        while (markerX < canvasWidth) {
+            if (markerX > 0) {
+                g2d.draw(new Line2D.Double(markerX + graphMargin,
+                                           graphMargin - 2,
+                                           markerX + graphMargin,
+                                           graphMargin + 2));
+            }
+
+            g2d.drawString(markerX + "", markerX + (int) graphMargin, (int) graphMargin - 5);
+
+            markerX = markerX + 50;
+        }
 
         // Ruler lines
+
+        // X
 
         shape = new Line2D.Double(graphMargin,
                                   graphMargin,
@@ -81,6 +115,8 @@ class EulerPanel extends JPanel implements MouseListener
                                   graphMargin);
 
         g2d.draw(shape);
+
+        // Y
 
         shape = new Line2D.Double(graphMargin,
                                   graphMargin,
@@ -93,15 +129,27 @@ class EulerPanel extends JPanel implements MouseListener
 
         int y = 0;
 
-        while (y * 100 < getSize().height) {
-            shape = new Line2D.Double(5,
-                                      graphMargin,
-                                      5,
-                                      getSize().height - graphMargin);
+        while (y * 100 < getSize().getHeight() - graphMargin * 2) {
+            // Y point marker
 
-            g.drawString(String.format("%d", y), 5, y * 100);
+            if (y > 0) {
+                    g2d.draw(new Line2D.Double(graphMargin - 2,
+                                            y * 100 + graphMargin,
+                                            graphMargin + 2,
+                                            y * 100 + graphMargin));
 
-            System.out.println("legend y = " + y);
+                // Y number on point
+
+                shape = new Line2D.Double(5,
+                                        graphMargin,
+                                        5,
+                                        getSize().height - graphMargin);
+
+                g2d.drawString(String.format("%d", y), (int) graphMargin - 15, y * 100 + (int) graphMargin);
+
+            }
+
+            //System.out.println("legend y = " + y);
 
             y += 1;
         }
@@ -117,9 +165,9 @@ class EulerPanel extends JPanel implements MouseListener
             }
 
             shape = new Line2D.Double(graphPoints.get(i - 1).getX() + graphMargin,
-                                      graphPoints.get(i - 1).getY(),
+                                      graphPoints.get(i - 1).getY() + graphMargin,
                                       graphPoints.get(i).getX() + graphMargin,
-                                      graphPoints.get(i).getY());
+                                      graphPoints.get(i).getY() + graphMargin);
 
             g2d.draw(shape);
         }
@@ -149,5 +197,13 @@ class EulerPanel extends JPanel implements MouseListener
         System.out.println("Mouse clicked on position: " + x + ", " + y);
 
         repaint();
+    }
+
+    class ComponentResizeListener extends ComponentAdapter {
+        public void componentResized(ComponentEvent e) {
+            System.out.println("EulerPanel resized");
+
+            calculatePoints();
+        }
     }
 }
