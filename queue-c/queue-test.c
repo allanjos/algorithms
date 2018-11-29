@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
   DEBUG("queue address: %p\n", queue_1);
 
 
-  for (int item_index = 0; item_index < 5; item_index++) {
+  for (int item_index = 0; item_index < 1000; item_index++) {
     DEBUG("\nCreate a queue item\n");
 
     QueueItem_t *item_1;
@@ -66,7 +66,9 @@ int main(int argc, char *argv[]) {
       break;
     }
 
-    printf("Item consumed..\n");
+    int *data = (int *) queue_item_get_data(item);
+
+    printf("Item data: %d\n", *data);
   } while (queue_pop_item(&queue_1));
 
 

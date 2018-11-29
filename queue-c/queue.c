@@ -30,6 +30,11 @@ void queue_item_set_data(QueueItem_t *queue_item, UserData_t data) {
   queue_item->data = (UserData_t) data;
 }
 
+UserData_t queue_item_get_data(QueueItem_t *queue_item) {
+  DEBUG("queue_item_set_data()\n");
+
+  return queue_item->data;
+}
 
 /**
  * Queue item destruction.

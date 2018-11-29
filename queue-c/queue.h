@@ -38,6 +38,8 @@ void queue_item_create(QueueItem_t **queue_item);
 
 void queue_item_set_data(QueueItem_t *queue_item, UserData_t data);
 
+UserData_t queue_item_get_data(QueueItem_t *queue_item);
+
 /**
  * Queue item destruction.
  */
